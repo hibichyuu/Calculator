@@ -20,24 +20,7 @@ button{
     background-color: rgb(146, 155, 158);
     font-size: 20px;
     font-weight: bold;
-}
-
-#operations{
-    display: flex;
-    flex-direction: column;
-    justify-content: space-around;
-    align-items: center;
-    gap: 8px;
-
-    flex: 0 1 60%;
-}
-
-#equalOp{
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    flex: 0 1 30%;
+    margin: 8px 8px;
 }
 
 #container{
@@ -58,6 +41,7 @@ button{
     height: 100%;
     width: 60%;
     background-color: rgb(66, 66, 66);
+    border: 2px solid black;
 
     border-radius: 2% 2% 2% 2%;
 }
@@ -95,6 +79,24 @@ button{
     height: 100%;
 }
 
+#operations{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+
+    flex: 0 1 60%;
+}
+
+#equalOp{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    flex: 0 1 30%;
+}
+
 #historyContainer{
     display: flex;
     flex-direction: column;
@@ -103,6 +105,7 @@ button{
     border-top-left-radius: 2%;
     border-top-right-radius: 2%;
     background-color: rgb(66, 66, 66);
+    border: 2px solid black;
 }
 
 #historyHeader{
@@ -130,6 +133,12 @@ button{
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    box-sizing: border-box;
 
     flex-basis: 100%;
+    border: 2px solid black;
+}
+
+#extra{
+    border: 2px solid rgb(66, 66, 66);
 }
