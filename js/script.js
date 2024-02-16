@@ -202,3 +202,8 @@ function resetVariables(){
 
 activateButtons();
 
+docQueries["buttons"].forEach((btn)=>{
+    btn.addEventListener("mousedown", ()=>{btn.style.backgroundColor = "rgb(62, 65, 66)"});
+    btn.addEventListener("mouseup",()=>{btn.style.backgroundColor = ""});
+});
+
