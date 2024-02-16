@@ -23,50 +23,82 @@ function updateScreen(){
     let screenText = 
         Array.from(docQueries["calcScreen"].textContent); 
     let opArr = [" ", this.value, " "];
+    let numbers;
 
     if(this.value >= 0 && this.value <= 9){
         if(checkStart()){
             screenText = [''];
         }
         screenText.push(this.value);
+        if(opVariables["operator"] != ''){
+            numbers = screenText.join('').split(` ${opVariables["operator"]} `);
+            opVariables["num1"] = numbers[0];
+            opVariables["num2"] = numbers[1];
+        }
         docQueries["calcScreen"].textContent = screenText.join('');
     }else{
         switch(this.value){
             case '-':
+                if(checkOpVariables()){
+                    operate();
+                    resetVariables();
+                    opVariables["num1"] = docQueries["calcScreen"].textContent;
+                    opVariables["operator"] = '-';
+                    docQueries["calcScreen"].textContent += opArr.join('');
+                }else if(opVariables["operator"] == '' && !miscVariables["start"]){
                 opVariables["operator"] = '-';
                 screenText = screenText.concat(opArr);
                 docQueries["calcScreen"].textContent = screenText.join('');
-                deActivateOperators();
+                }
                 break;
 
             case '+':
+                if(checkOpVariables()){
+                    operate();
+                    resetVariables();
+                    opVariables["num1"] = docQueries["calcScreen"].textContent;
+                    opVariables["operator"] = '+';
+                    docQueries["calcScreen"].textContent += opArr.join('');
+                }else if(opVariables["operator"] == '' && !miscVariables["start"]){
                 opVariables["operator"] = '+';
                 screenText = screenText.concat(opArr);
                 docQueries["calcScreen"].textContent = screenText.join('');
-                deActivateOperators();
+                }
                 break;
 
             case 'x':
+                if(checkOpVariables()){
+                    operate();
+                    resetVariables();
+                    opVariables["num1"] = docQueries["calcScreen"].textContent;
+                    opVariables["operator"] = 'x';
+                    docQueries["calcScreen"].textContent += opArr.join('');
+                }else if(opVariables["operator"] == '' && !miscVariables["start"]){
                 opVariables["operator"] = 'x';
                 screenText = screenText.concat(opArr);
                 docQueries["calcScreen"].textContent = screenText.join('');
-                deActivateOperators();
+                }
                 break;
 
             case '/':
+                if(checkOpVariables()){
+                    operate();
+                    resetVariables();
+                    opVariables["num1"] = docQueries["calcScreen"].textContent;
+                    opVariables["operator"] = '/';
+                    docQueries["calcScreen"].textContent += opArr.join('');
+                }else if(opVariables["operator"] == '' && !miscVariables["start"]){
                 opVariables["operator"] = '/';
                 screenText = screenText.concat(opArr);
                 docQueries["calcScreen"].textContent = screenText.join('');
-                deActivateOperators();
+                }
                 break;
 
             case '=':
-                let numbers = screenText.join('').split(` ${opVariables["operator"]} `);
-                opVariables["num1"] = numbers[0];
-                opVariables["num2"] = numbers[1];
-                if(opVariables["num1"] != '' && opVariables["num2"] != ''){
-                    docQueries["calcScreen"].textContent = operate(); 
+                if(checkOpVariables()){
+                    operate(); 
                     miscVariables["start"] = true;  
+                    resetVariables();
                 }
                 break;
         }
@@ -114,18 +146,23 @@ function reActivateOperators(){
 }
 
 function operate(){
-    num1 = parseInt(opVariables["num1"]);
-    num2 = parseInt(opVariables["num2"]);
-    op = opVariables["operator"];
+    let num1 = parseInt(opVariables["num1"]);
+    let num2 = parseInt(opVariables["num2"]);
+    let op = opVariables["operator"];
+
     switch(op){
         case '-':
-            return subtract(num1, num2);
+            docQueries["calcScreen"].textContent = subtract(num1, num2);
+            break;
         case '+':
-            return add(num1, num2);
+            docQueries["calcScreen"].textContent = add(num1, num2);
+            break;
         case 'x':
-            return multiply(num1, num2);
+            docQueries["calcScreen"].textContent = multiply(num1, num2);
+            break;
         case '/':
-            return divide(num1, num2);
+            docQueries["calcScreen"].textContent = divide(num1, num2);
+            break;
     }
 }
 
@@ -147,11 +184,21 @@ function restartScreen(){
 function checkStart(){
     if(miscVariables["start"] == true){
         restartScreen();
-        reActivateOperators();
         miscVariables["start"] = false;
         return true;
     }
     return false;
 }
 
+function checkOpVariables(){
+    if(opVariables["num1"] != '' && opVariables["num2"] != '') return true;
+}
+
+function resetVariables(){
+    opVariables["num1"] = '';
+    opVariables["num2"] = '';
+    opVariables["operator"] = '';
+}
+
 activateButtons();
+
