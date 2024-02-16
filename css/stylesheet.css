@@ -46,10 +46,19 @@ button{
     border-radius: 2% 2% 2% 2%;
 }
 
-#results{
+#calcScreen{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
     flex: 0 1 25%; 
     margin: 5% 10% 5% 10%;
     background-color: rgb(146, 155, 158);
+    border: 3px solid black;
+
+    font-size: 40px;
+    font-weight: bold;
+    vertical-align: middle;
 }
 
 #btnsContainer{
