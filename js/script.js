@@ -101,6 +101,11 @@ function updateScreen(){
                     resetVariables();
                 }
                 break;
+            case 'clear':
+                resetVariables();
+                restartScreen();
+                miscVariables["start"] = true;
+                break;
         }
     }
 }

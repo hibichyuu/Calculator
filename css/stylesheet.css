@@ -95,6 +95,13 @@ button:hover{
     height: 100%;
 }
 
+#clear{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+
+}
+
 #operations{
     display: flex;
     flex-direction: column;
