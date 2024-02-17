@@ -123,6 +123,20 @@ function updateScreen(){
                     opVariables["num2"] = numbers[1];
                 }
                 break;
+            case 'back':
+                if(screenText[screenText.length - 1] == " " && !miscVariables["start"]){
+                    for(let i = 1; i <= 3; i++){screenText.pop();};
+                    opVariables["operator"] = '';
+                }else{
+                    screenText.pop();
+                }
+                docQueries["calcScreen"].textContent = screenText.join('');
+                if(opVariables["operator"] != ''){
+                    numbers = screenText.join('').split(` ${opVariables["operator"]} `);
+                    opVariables["num1"] = numbers[0];
+                    opVariables["num2"] = numbers[1];
+                }
+                break;
             case 'clear':
                 resetVariables();
                 restartScreen();
