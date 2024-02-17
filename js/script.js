@@ -7,6 +7,7 @@ const opVariables = {
     "num1": '',
     "num2": '',
     "operator": '',
+    "decimalsAllowed": [true,true],
 };
 
 const miscVariables = {
@@ -45,6 +46,7 @@ function updateScreen(){
                     opVariables["num1"] = docQueries["calcScreen"].textContent;
                     opVariables["operator"] = '-';
                     docQueries["calcScreen"].textContent += opArr.join('');
+                    opVariables["decimalsAllowed"][0] = false;
                 }else if(opVariables["operator"] == '' && !miscVariables["start"]){
                 opVariables["operator"] = '-';
                 screenText = screenText.concat(opArr);
@@ -59,6 +61,7 @@ function updateScreen(){
                     opVariables["num1"] = docQueries["calcScreen"].textContent;
                     opVariables["operator"] = '+';
                     docQueries["calcScreen"].textContent += opArr.join('');
+                    opVariables["decimalsAllowed"][0] = false;
                 }else if(opVariables["operator"] == '' && !miscVariables["start"]){
                 opVariables["operator"] = '+';
                 screenText = screenText.concat(opArr);
@@ -73,6 +76,7 @@ function updateScreen(){
                     opVariables["num1"] = docQueries["calcScreen"].textContent;
                     opVariables["operator"] = 'x';
                     docQueries["calcScreen"].textContent += opArr.join('');
+                    opVariables["decimalsAllowed"][0] = false;
                 }else if(opVariables["operator"] == '' && !miscVariables["start"]){
                 opVariables["operator"] = 'x';
                 screenText = screenText.concat(opArr);
@@ -87,6 +91,7 @@ function updateScreen(){
                     opVariables["num1"] = docQueries["calcScreen"].textContent;
                     opVariables["operator"] = '/';
                     docQueries["calcScreen"].textContent += opArr.join('');
+                    opVariables["decimalsAllowed"][0] = false;
                 }else if(opVariables["operator"] == '' && !miscVariables["start"]){
                 opVariables["operator"] = '/';
                 screenText = screenText.concat(opArr);
@@ -99,6 +104,23 @@ function updateScreen(){
                     operate(); 
                     miscVariables["start"] = true;  
                     resetVariables();
+                }
+                break;
+            case '.':
+                if(opVariables["operator"] == '' && opVariables["decimalsAllowed"][0]){
+                    screenText.push('.');
+                    docQueries["calcScreen"].textContent = screenText.join('');
+                    opVariables["decimalsAllowed"][0] = false;
+                    miscVariables["start"] = false;
+                }else if(opVariables["operator"] != '' && opVariables["decimalsAllowed"][1]){
+                    screenText.push('.');
+                    docQueries["calcScreen"].textContent = screenText.join('');
+                    opVariables["decimalsAllowed"][1] = false;
+                }
+                if(opVariables["operator"] != ''){
+                    numbers = screenText.join('').split(` ${opVariables["operator"]} `);
+                    opVariables["num1"] = numbers[0];
+                    opVariables["num2"] = numbers[1];
                 }
                 break;
             case 'clear':
@@ -151,9 +173,26 @@ function reActivateOperators(){
 }
 
 function operate(){
-    let num1 = parseInt(opVariables["num1"]);
-    let num2 = parseInt(opVariables["num2"]);
+
+    let num1;
+    let num2;
     let op = opVariables["operator"];
+    
+    if(opVariables["num1"].includes('.')){
+        num1 = parseFloat(opVariables["num1"])
+    }else{
+        num1 = parseInt(opVariables["num1"]);
+    };
+
+    if(opVariables["num2"].includes('.')){
+        num2 = parseFloat(opVariables["num2"]);
+    }else{
+        num2 = parseInt(opVariables["num2"]); 
+    }
+
+    if(opVariables["num1"] == '.') num1 = 0;
+    if(opVariables["num2"] == '.') num2 = 0;
+
 
     switch(op){
         case '-':
@@ -209,6 +248,8 @@ function resetVariables(){
     opVariables["num1"] = '';
     opVariables["num2"] = '';
     opVariables["operator"] = '';
+    opVariables["decimalsAllowed"][0] = true;
+    opVariables["decimalsAllowed"][1] = true;
 }
 
 activateButtons();
