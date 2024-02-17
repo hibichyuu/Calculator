@@ -166,7 +166,13 @@ function operate(){
             docQueries["calcScreen"].textContent = multiply(num1, num2);
             break;
         case '/':
+            if(num2 == 0){
+                docQueries["calcScreen"].textContent = "you cant divide by zero ya goofball";
+                resetVariables();
+                miscVariables["start"] = true;
+            }else{
             docQueries["calcScreen"].textContent = divide(num1, num2);
+            }
             break;
     }
 }
