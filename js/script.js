@@ -1,6 +1,8 @@
 const docQueries = {
     "buttons": document.querySelectorAll("button"),
     "calcScreen": document.querySelector("#calcScreen"),
+    "history": document.querySelector("#history"),
+    "historicalDivs": [],
 };
 
 const opVariables = {
@@ -189,6 +191,7 @@ function reActivateOperators(){
 
 function operate(){
 
+    let answer;
     let num1;
     let num2;
     let op = opVariables["operator"];
@@ -208,21 +211,15 @@ function operate(){
     if(opVariables["num1"] == '.') num1 = 0;
     if(opVariables["num2"] == '.') num2 = 0;
 
-    resetVariables();
-    opVariables["decimalsAllowed"][0] = false;
-
     switch(op){
         case '-':
-            docQueries["calcScreen"].textContent = subtract(num1, num2);
-            opVariables["num1"] = subtract(num1, num2);
+            answer = subtract(num1, num2);
             break;
         case '+':
-            docQueries["calcScreen"].textContent = add(num1, num2);
-            opVariables["num1"] = add(num1, num2);
+            answer = add(num1, num2);
             break;
         case 'x':
-            docQueries["calcScreen"].textContent = multiply(num1, num2);
-            opVariables["num1"] = multiply(num1, num2);
+            answer = multiply(num1, num2);
             break;
         case '/':
             if(num2 == 0){
@@ -230,10 +227,27 @@ function operate(){
                 resetVariables();
                 miscVariables["start"] = true;
             }else{
-            docQueries["calcScreen"].textContent = divide(num1, num2);
-            opVariables["num1"] = divide(num1, num2);
+                answer = divide(num1, num2);
             }
             break;
+    }
+    appendHistory(num1, op, num2, answer);
+    resetVariables();
+    docQueries["calcScreen"].textContent = `${answer}`;
+    opVariables["num1"] = `${answer}`;
+    opVariables["decimalsAllowed"][0] = false;
+}
+
+function appendHistory(num1, operator, num2, answer){
+    const history = docQueries["history"];
+    const historicalDivs = docQueries["historicalDivs"];
+    const historicalDiv = document.createElement('div');
+    historicalDiv.classList.add("historicalDiv");
+    historicalDiv.textContent = `${num1} ${operator} ${num2} = ${answer}` 
+    historicalDivs.push(historicalDiv);
+    history.innerHTML = '';
+    for(let i = historicalDivs.length - 1; i >= 0; i--){
+        history.appendChild(historicalDivs[i]);
     }
 }
 
