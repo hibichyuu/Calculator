@@ -29,6 +29,7 @@ function updateScreen(){
     if(this.value >= 0 && this.value <= 9){
         if(checkStart()){
             screenText = [''];
+            resetVariables();
         }
         screenText.push(this.value);
         if(opVariables["operator"] != ''){
@@ -36,18 +37,19 @@ function updateScreen(){
             opVariables["num1"] = numbers[0];
             opVariables["num2"] = numbers[1];
         }
+        else{opVariables["num1"] = this.value}
         docQueries["calcScreen"].textContent = screenText.join('');
     }else{
         switch(this.value){
             case '-':
                 if(checkOpVariables()){
                     operate();
-                    resetVariables();
                     opVariables["num1"] = docQueries["calcScreen"].textContent;
                     opVariables["operator"] = '-';
                     docQueries["calcScreen"].textContent += opArr.join('');
                     opVariables["decimalsAllowed"][0] = false;
-                }else if(opVariables["operator"] == '' && !miscVariables["start"]){
+                }else if(opVariables["operator"] == '' && opVariables["num1"] != ''){
+                miscVariables["start"] = false;
                 opVariables["operator"] = '-';
                 screenText = screenText.concat(opArr);
                 docQueries["calcScreen"].textContent = screenText.join('');
@@ -57,12 +59,12 @@ function updateScreen(){
             case '+':
                 if(checkOpVariables()){
                     operate();
-                    resetVariables();
                     opVariables["num1"] = docQueries["calcScreen"].textContent;
                     opVariables["operator"] = '+';
                     docQueries["calcScreen"].textContent += opArr.join('');
                     opVariables["decimalsAllowed"][0] = false;
-                }else if(opVariables["operator"] == '' && !miscVariables["start"]){
+                }else if(opVariables["operator"] == '' && opVariables["num1"] != ''){
+                miscVariables["start"] = false;
                 opVariables["operator"] = '+';
                 screenText = screenText.concat(opArr);
                 docQueries["calcScreen"].textContent = screenText.join('');
@@ -72,12 +74,12 @@ function updateScreen(){
             case 'x':
                 if(checkOpVariables()){
                     operate();
-                    resetVariables();
                     opVariables["num1"] = docQueries["calcScreen"].textContent;
                     opVariables["operator"] = 'x';
                     docQueries["calcScreen"].textContent += opArr.join('');
                     opVariables["decimalsAllowed"][0] = false;
-                }else if(opVariables["operator"] == '' && !miscVariables["start"]){
+                }else if(opVariables["operator"] == '' && opVariables["num1"] != ''){
+                miscVariables["start"] = false;
                 opVariables["operator"] = 'x';
                 screenText = screenText.concat(opArr);
                 docQueries["calcScreen"].textContent = screenText.join('');
@@ -87,12 +89,12 @@ function updateScreen(){
             case '/':
                 if(checkOpVariables()){
                     operate();
-                    resetVariables();
                     opVariables["num1"] = docQueries["calcScreen"].textContent;
                     opVariables["operator"] = '/';
                     docQueries["calcScreen"].textContent += opArr.join('');
                     opVariables["decimalsAllowed"][0] = false;
-                }else if(opVariables["operator"] == '' && !miscVariables["start"]){
+                }else if(opVariables["operator"] == '' && opVariables["num1"] != ''){
+                miscVariables["start"] = false;
                 opVariables["operator"] = '/';
                 screenText = screenText.concat(opArr);
                 docQueries["calcScreen"].textContent = screenText.join('');
@@ -103,7 +105,6 @@ function updateScreen(){
                 if(checkOpVariables()){
                     operate(); 
                     miscVariables["start"] = true;  
-                    resetVariables();
                 }
                 break;
             case '.':
@@ -207,16 +208,21 @@ function operate(){
     if(opVariables["num1"] == '.') num1 = 0;
     if(opVariables["num2"] == '.') num2 = 0;
 
+    resetVariables();
+    opVariables["decimalsAllowed"][0] = false;
 
     switch(op){
         case '-':
             docQueries["calcScreen"].textContent = subtract(num1, num2);
+            opVariables["num1"] = subtract(num1, num2);
             break;
         case '+':
             docQueries["calcScreen"].textContent = add(num1, num2);
+            opVariables["num1"] = add(num1, num2);
             break;
         case 'x':
             docQueries["calcScreen"].textContent = multiply(num1, num2);
+            opVariables["num1"] = multiply(num1, num2);
             break;
         case '/':
             if(num2 == 0){
@@ -225,6 +231,7 @@ function operate(){
                 miscVariables["start"] = true;
             }else{
             docQueries["calcScreen"].textContent = divide(num1, num2);
+            opVariables["num1"] = divide(num1, num2);
             }
             break;
     }
