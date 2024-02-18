@@ -236,6 +236,7 @@ function operate(){
     docQueries["calcScreen"].textContent = `${answer}`;
     opVariables["num1"] = `${answer}`;
     opVariables["decimalsAllowed"][0] = false;
+    deHighlightDivs();
 }
 
 function appendHistory(num1, operator, num2, answer){
@@ -245,9 +246,30 @@ function appendHistory(num1, operator, num2, answer){
     historicalDiv.classList.add("historicalDiv");
     historicalDiv.textContent = `${num1} ${operator} ${num2} = ${answer}` 
     historicalDivs.push(historicalDiv);
+    historicalDiv.addEventListener('click', ()=>{
+        resetVariables();
+        opVariables["num1"] = answer;
+        opVariables["operator"] = '';
+        opVariables["num2"] = '';
+        miscVariables["start"] = false;
+        docQueries["calcScreen"].textContent = `${answer}`;
+        deHighlightDivs();
+        highlightDiv(historicalDiv);
+        
+    });
     history.innerHTML = '';
     for(let i = historicalDivs.length - 1; i >= 0; i--){
         history.appendChild(historicalDivs[i]);
+    }
+}
+
+function highlightDiv(div){
+    div.style.backgroundColor = 'rgb(230, 232, 233)';
+}
+
+function deHighlightDivs(){
+    for(let i = 0; i < docQueries["historicalDivs"].length; i++){
+        docQueries["historicalDivs"][i].style.backgroundColor = 'rgb(193, 200, 204)';
     }
 }
 
@@ -288,6 +310,8 @@ function resetVariables(){
 }
 
 activateButtons();
+
+
 
 docQueries["buttons"].forEach((btn)=>{
     btn.addEventListener("mousedown", ()=>{btn.style.backgroundColor = "rgb(62, 65, 66)"});
