@@ -251,6 +251,7 @@ function appendHistory(num1, operator, num2, answer){
         opVariables["num1"] = answer;
         opVariables["operator"] = '';
         opVariables["num2"] = '';
+        opVariables["decimalsAllowed"][0] = false;
         miscVariables["start"] = false;
         docQueries["calcScreen"].textContent = `${answer}`;
         deHighlightDivs();
